@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Result Management System</title>
+
+    <style>
+
+        body {
+            font-family: Arial;
+            background-color: #f2f2f2;
+            padding: 30px;
+        }
+
+        .container {
+            background-color: white;
+            padding: 25px;
+            width: 80%;
+            margin: auto;
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: darkblue;
+        }
+
+        input {
+            padding: 10px;
+            margin: 8px;
+            width: 90%;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 10px;
+            background-color: darkblue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: blue;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: darkblue;
+            color: white;
+        }
+
+        #message {
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Student Result Management System</h1>
+
+        <h3>Enter Student Information</h3>
+
+        <input type="text" id="name"
+        placeholder="Enter Student Name">
+
+        <input type="number" id="math"
+        placeholder="Mathematics Marks">
+
+        <input type="number" id="science"
+        placeholder="Science Marks">
+
+        <input type="number" id="computer"
+        placeholder="Computer Marks">
+
+        <br>
+
+        <button onclick="addStudent()">Add Student</button>
+
+        <button onclick="generateList()">Generate Student List</button>
+
+        <p id="message"></p>
+
+        <div id="result"></div>
+
+    </div>
+
+    <script>
+
+        // Create an empty array
+        let students = [];
+
+
+        // Function to calculate grade
+        function calculateGrade(percentage) {
+
+            if (percentage >= 90) {
+                return "A+";
+            }
+            else if (percentage >= 80) {
+                return "A";
+            }
+            else if (percentage >= 70) {
+                return "B";
+            }
+            else if (percentage >= 60) {
+                return "C";
+            }
+            else if (percentage >= 50) {
+                return "D";
+            }
+            else {
+                return "F";
+            }
+
+        }
+
+
+        // Function to add student
+        function addStudent() {
+
+            let name = document.getElementById("name").value;
+
+            let math = document.getElementById("math").value;
+
+            let science = document.getElementById("science").value;
+
+            let computer = document.getElementById("computer").value;
+
+
+            // Check empty name
+            if (name.trim() == "") {
+
+                document.getElementById("message").textContent =
+                    "Please enter student name";
+
+                return;
+            }
+
+
+            // Check empty marks
+            if (math === "" || science === "" || computer === "") {
+
+                document.getElementById("message").textContent =
+                    "Please enter all subject marks";
+
+                return;
+            }
+
+
+            // Convert marks into numbers
+            math = Number(math);
+            science = Number(science);
+            computer = Number(computer);
+
+
+            // Validate marks
+            if (
+                math < 0 || math > 100 ||
+                science < 0 || science > 100 ||
+                computer < 0 || computer > 100
+            ) {
+
+                document.getElementById("message").textContent =
+                    "Invalid Marks! Enter marks between 0 and 100";
+
+                return;
+            }
+
+
+            // Calculate total and percentage
+            let total = math + science + computer;
+
+            let percentage = (total / 300) * 100;
+
+
+            // Calculate grade
+            let grade = calculateGrade(percentage);
+
+
+            // Store student information in array
+            let student = {
+
+                name: name,
+                total: total,
+                percentage: percentage.toFixed(2),
+                grade: grade
+
+            };
+
+            students.push(student);
+
+
+            // Display success message
+            document.getElementById("message").textContent =
+                "Result calculated successfully!";
+
+
+            // Clear input fields
+            document.getElementById("name").value = "";
+            document.getElementById("math").value = "";
+            document.getElementById("science").value = "";
+            document.getElementById("computer").value = "";
+
+        }
+
+
+        // Function to generate student list
+        function generateList() {
+
+            let output = "";
+
+            output += "<h2>Student Records</h2>";
+
+            output += "<table>";
+
+            output += "<tr>";
+            output += "<th>Name</th>";
+            output += "<th>Total Marks</th>";
+            output += "<th>Percentage</th>";
+            output += "<th>Grade</th>";
+            output += "</tr>";
+
+
+            // Loop through all students
+            for (let i = 0; i < students.length; i++) {
+
+                output += "<tr>";
+
+                output += "<td>" + students[i].name + "</td>";
+
+                output += "<td>" + students[i].total + "/300</td>";
+
+                output += "<td>" + students[i].percentage + "%</td>";
+
+                output += "<td>" + students[i].grade + "</td>";
+
+                output += "</tr>";
+
+            }
+
+
+            output += "</table>";
+
+
+            // Display table
+            if (students.length == 0) {
+
+                document.getElementById("result").innerHTML =
+                    "No student records found.";
+
+            }
+            else {
+
+                document.getElementById("result").innerHTML = output;
+
+            }
+
+        }
+
+    </script>
+
+</body>
+</html>
